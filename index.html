@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Operating Systems — MCQ Self-Test (224 MCQs)</title>
+<style>
+  :root{
+    --bg:#F5F7F4; --card:#FFFFFF;
+    --teal:#0F766E; --teal-d:#0B5B54; --teal-soft:#EFF8F3;
+    --mint:#E2F0E8; --mint2:#DDEEE6;
+    --ink:#1F2937; --muted:#5B6B66; --line:#E3EAE5;
+    --ok:#178A4C; --ok-bg:#E6F6EC;
+    --bad:#D33A2C; --bad-bg:#FDECEA;
+    --dark:#1F2937;
+    --sh:0 2px 10px rgba(31,41,55,.05), 0 12px 32px rgba(31,41,55,.05);
+    --r-lg:20px; --r-md:16px; --r-sm:12px;
+  }
+  *{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    margin:0; background:var(--bg); color:var(--ink);
+    font-size:16px; line-height:1.5; min-height:100vh;
+  }
+  body.hasBar{ padding-bottom:92px; }
+  button{ font-family:inherit; }
+  button:focus-visible, select:focus-visible{ outline:3px solid rgba(15,118,110,.45); outline-offset:2px; }
+  .hidden{ display:none !important; }
+  main{ max-width:960px; margin:0 auto; padding:10px 16px 40px; }
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--r-lg);
+    box-shadow:var(--sh); padding:22px 20px; margin-bottom:16px;
+  }
+
+  /* ---------- Top bar / progress ---------- */
+  .topbar{ display:flex; align-items:center; gap:12px; padding:16px 2px 10px; }
+  .backBtn{
+    flex:none; display:inline-flex; align-items:center; gap:6px;
+    background:var(--card); border:1px solid var(--line); color:var(--ink);
+    border-radius:999px; min-height:44px; padding:9px 16px;
+    font-size:14.5px; font-weight:650; cursor:pointer; box-shadow:var(--sh);
+  }
+  .topTitle{ font-size:15.5px; font-weight:700; min-width:0;
+             white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .prog{ height:6px; background:#E3EAE5; border-radius:999px; overflow:hidden; margin:2px 2px 14px; }
+  .progFill{ height:100%; width:0%; background:var(--teal); border-radius:999px; transition:width .3s ease; }
+  .scorePill{
+    display:inline-block; background:var(--teal); color:#fff; border-radius:999px;
+    padding:10px 24px; font-size:18px; font-weight:800; letter-spacing:.2px;
+    font-variant-numeric:tabular-nums;
+  }
+  .scorePill.small{ padding:7px 16px; font-size:14.5px; background:var(--mint); color:var(--teal-d); }
+  .rowBetween{ display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+
+  /* ---------- Home ---------- */
+  .hero{ text-align:center; padding:36px 8px 8px; }
+  .hero h1{ font-size:clamp(27px, 6vw, 38px); font-weight:850; letter-spacing:-.5px; margin:0 0 8px; line-height:1.2; }
+  .hero p{ margin:0; color:var(--muted); font-size:16px; }
+  .stats{ display:flex; justify-content:center; gap:clamp(26px, 8vw, 64px); flex-wrap:wrap; padding:22px 0 26px; }
+  .stat{ text-align:center; }
+  .stat b{ display:block; font-size:31px; font-weight:850; color:var(--teal); line-height:1.1; font-variant-numeric:tabular-nums; }
+  .stat span{ font-size:11.5px; font-weight:700; letter-spacing:1.6px; color:var(--muted); text-transform:uppercase; }
+  .card h2{ font-size:20px; font-weight:800; margin:0 0 6px; letter-spacing:-.2px; }
+  .card .sub{ color:var(--muted); font-size:14.5px; margin:0 0 14px; }
+  .pillBtn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    background:var(--teal); color:#fff; border:0; border-radius:999px; cursor:pointer;
+    min-height:50px; padding:13px 26px; font-size:15.5px; font-weight:750;
+    transition:background .18s ease, transform .15s ease;
+  }
+  .pillBtn:active{ transform:scale(.98); }
+  .fldLbl{ display:block; font-size:11.5px; font-weight:750; letter-spacing:1.4px;
+           text-transform:uppercase; color:var(--muted); margin:0 0 7px; }
+  .rangeGrid{ display:grid; grid-template-columns:1fr; gap:12px; margin-bottom:12px; }
+  select{
+    width:100%; min-height:50px; padding:11px 13px; font-size:15px; color:var(--ink);
+    background:#fff; border:1.5px solid var(--line); border-radius:var(--r-sm);
+    font-family:inherit; appearance:auto;
+  }
+  .rangeSummary{
+    background:var(--mint2); color:var(--teal-d); border-radius:var(--r-sm);
+    padding:11px 14px; font-size:14.5px; font-weight:700; margin-bottom:14px;
+  }
+  .secGrid{ display:grid; grid-template-columns:1fr; gap:14px; margin-bottom:18px; }
+  .secCard{
+    background:var(--card); border:1px solid var(--line); border-radius:18px; box-shadow:var(--sh);
+    padding:18px; display:flex; flex-direction:column; gap:9px; cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  .numBadge{
+    width:46px; height:46px; border-radius:13px; background:var(--mint);
+    color:var(--teal); font-weight:850; font-size:16px;
+    display:flex; align-items:center; justify-content:center; font-variant-numeric:tabular-nums;
+  }
+  .secCard .st{ font-size:16px; font-weight:750; line-height:1.4; }
+  .secCard .meta{ font-size:13.5px; color:var(--muted); }
+  .openLink{
+    margin-top:auto; align-self:flex-start; background:none; border:0; cursor:pointer;
+    color:var(--teal); font-size:15px; font-weight:750; padding:6px 2px; min-height:36px;
+  }
+  .footCredit{ text-align:center; font-size:12.5px; color:var(--muted); letter-spacing:.4px; padding:6px 0 10px; }
+
+  /* ---------- Section hub ---------- */
+  .hubHead{ padding:8px 2px 4px; }
+  .hubHead h1{ font-size:clamp(21px, 5vw, 27px); font-weight:850; letter-spacing:-.3px; margin:0 0 6px; line-height:1.3; }
+  .hubMeta{ color:var(--muted); font-size:14.5px; margin:0 0 16px; }
+  .hubScoreRow{ margin:0 2px 18px; }
+  .optCard{
+    display:flex; align-items:center; gap:15px; width:100%; text-align:left;
+    background:var(--card); border:1px solid var(--line); border-radius:var(--r-lg);
+    box-shadow:var(--sh); padding:19px 18px; margin-bottom:14px; cursor:pointer; min-height:84px;
+    transition:transform .15s ease, border-color .15s ease;
+  }
+  .optCard:active{ transform:scale(.99); }
+  .optEmoji{
+    flex:none; width:52px; height:52px; border-radius:15px; background:var(--mint);
+    display:flex; align-items:center; justify-content:center; font-size:25px;
+  }
+  .optCard .ot1{ font-size:17px; font-weight:800; line-height:1.3; }
+  .optCard .ot2{ font-size:13.5px; color:var(--muted); }
+  .optCard .chev{ margin-left:auto; color:var(--teal); font-size:21px; font-weight:800; flex:none; }
+
+  /* ---------- Practice ---------- */
+  .qCount{ font-size:13.5px; font-weight:650; color:var(--muted); margin-bottom:6px; font-variant-numeric:tabular-nums; }
+  .qtext{ font-size:18px; font-weight:650; line-height:1.5; margin:4px 0 16px; }
+  .pOpt{
+    display:flex; align-items:center; gap:12px; width:100%; text-align:left;
+    background:#fff; border:1.5px solid var(--line); border-radius:14px;
+    padding:13px 14px; margin:9px 0; min-height:56px; cursor:pointer;
+    font-size:16px; line-height:1.45; color:var(--ink);
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .pOpt .L{
+    flex:none; width:31px; height:31px; border-radius:50%;
+    background:var(--mint); color:var(--teal-d); font-weight:800; font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .pOpt .ot{ flex:1; min-width:0; overflow-wrap:break-word; }
+  .pOpt.right{ border-color:var(--ok); background:var(--ok-bg); }
+  .pOpt.right .L{ background:var(--ok); color:#fff; }
+  .pOpt.wrong{ border-color:var(--bad); background:var(--bad-bg); }
+  .pOpt.wrong .L{ background:var(--bad); color:#fff; }
+  .pOpt:disabled{ cursor:default; }
+  .fb{ display:none; font-weight:700; font-size:14.5px; margin:13px 0 2px; padding:12px 14px;
+       border-radius:var(--r-sm); line-height:1.5; }
+  .fb.ok{ display:block; color:#0C5A2E; background:var(--ok-bg); }
+  .fb.no{ display:block; color:#8F1D13; background:var(--bad-bg); }
+  .centreRow{ display:flex; justify-content:center; margin-top:18px; }
+
+  /* ---------- Results ---------- */
+  .doneHead{ text-align:center; padding-top:6px; }
+  .doneHead h1{ font-size:clamp(23px, 5.5vw, 29px); font-weight:850; margin:4px 0 4px; letter-spacing:-.3px; }
+  .scoreCircle{ position:relative; width:172px; height:172px; margin:14px auto 6px; }
+  .scoreCircle svg{ width:100%; height:100%; transform:rotate(-90deg); display:block; }
+  .scoreCircle circle{ fill:none; stroke-width:11; stroke-linecap:round; }
+  .scBg{ stroke:var(--mint); }
+  .scFg{ stroke:var(--teal); transition:stroke-dashoffset .9s cubic-bezier(.22,1,.36,1); }
+  .scCentre{
+    position:absolute; inset:0; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; text-align:center; gap:1px;
+  }
+  .scBig{ font-size:33px; font-weight:850; line-height:1.05; font-variant-numeric:tabular-nums; }
+  .scPct{ font-size:15px; font-weight:700; color:var(--muted); font-variant-numeric:tabular-nums; }
+  .tileGrid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:16px 0 6px; }
+  .tile{
+    background:var(--teal-soft); border:1px solid var(--line); border-radius:var(--r-md);
+    padding:13px 6px; text-align:center;
+  }
+  .tile b{ display:block; font-size:21px; font-weight:850; font-variant-numeric:tabular-nums; }
+  .tile span{ font-size:12px; font-weight:650; color:var(--muted); }
+  .btnRow{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:16px; }
+  .ghostBtn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    background:#fff; color:var(--ink); border:1.5px solid var(--line); border-radius:999px;
+    min-height:50px; padding:12px 22px; font-size:15px; font-weight:700; cursor:pointer;
+  }
+
+  /* breakdown */
+  .brkRow{ padding:10px 2px; border-bottom:1px solid var(--line); }
+  .brkRow:last-child{ border-bottom:0; }
+  .brkTop{ display:flex; justify-content:space-between; gap:10px; font-size:14.5px; }
+  .brkTop .bt{ font-weight:650; min-width:0; }
+  .brkTop .bn{ font-weight:800; white-space:nowrap; font-variant-numeric:tabular-nums; }
+  .brkBar{ height:7px; background:var(--mint); border-radius:99px; overflow:hidden; margin-top:7px; }
+  .brkBar i{ display:block; height:100%; background:var(--teal); border-radius:99px; }
+  .brkRow.weak .bn{ color:var(--bad); } .brkRow.weak .brkBar i{ background:var(--bad); }
+  .brkRow.strong .bn{ color:var(--ok); } .brkRow.strong .brkBar i{ background:var(--ok); }
+
+  /* ---------- Scrolling test ---------- */
+  .instr{ color:var(--muted); font-size:14.5px; margin:0 2px 14px; }
+  .tq{ background:var(--card); border:1px solid var(--line); border-radius:var(--r-lg);
+       box-shadow:var(--sh); padding:19px 18px; margin-bottom:14px; }
+  .tq .qt{ font-size:16.5px; font-weight:650; line-height:1.5; margin:0 0 13px; }
+  .tq .qt b{ color:var(--teal); }
+  .tOpts{ display:grid; grid-template-columns:1fr; gap:9px; }
+  .tOpt{
+    display:flex; align-items:center; gap:11px; width:100%; text-align:left;
+    background:#fff; border:1.5px solid var(--line); border-radius:var(--r-sm);
+    padding:11px 13px; min-height:50px; cursor:pointer; font-size:15.5px; line-height:1.45; color:var(--ink);
+    transition:border-color .14s ease, background .14s ease;
+  }
+  .tOpt .radio{
+    flex:none; width:20px; height:20px; border-radius:50%;
+    border:2px solid #B9C8C0; position:relative; background:#fff;
+  }
+  .tOpt .ot{ flex:1; min-width:0; overflow-wrap:break-word; }
+  .tOpt.sel{ border-color:var(--teal); background:var(--teal-soft); }
+  .tOpt.sel .radio{ border-color:var(--teal); }
+  .tOpt.sel .radio::after{
+    content:""; position:absolute; inset:3.5px; border-radius:50%; background:var(--teal);
+  }
+  #submitBar{
+    position:fixed; left:0; right:0; bottom:0; z-index:50;
+    background:rgba(255,255,255,.96); border-top:1px solid var(--line);
+    box-shadow:0 -6px 22px rgba(31,41,55,.08);
+  }
+  #submitBar .in{
+    max-width:960px; margin:0 auto; padding:12px 16px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+  }
+  #answeredInfo{ font-size:14px; font-weight:650; color:var(--muted); font-variant-numeric:tabular-nums; }
+  .submitBtn{
+    background:var(--dark); color:#fff; border:0; border-radius:999px; cursor:pointer;
+    min-height:50px; padding:13px 30px; font-size:15.5px; font-weight:750;
+  }
+  .submitBtn:active{ transform:scale(.98); }
+
+  /* ---------- Review ---------- */
+  .rq{ background:var(--card); border:1px solid var(--line); border-radius:var(--r-md);
+       box-shadow:var(--sh); padding:16px; margin-bottom:12px; }
+  .rq .stag{ font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.7px; color:var(--muted); }
+  .rq .qt{ font-weight:650; font-size:15.5px; margin:5px 0 10px; line-height:1.5; }
+  .rq .ro{
+    font-size:14.5px; padding:9px 12px; border-radius:10px; margin:5px 0;
+    border:1.5px solid var(--line); background:#FBFCFB; line-height:1.45; overflow-wrap:break-word;
+  }
+  .rq .ro.right{ border-color:var(--ok); background:var(--ok-bg); }
+  .rq .ro.mineWrong{ border-color:var(--bad); background:var(--bad-bg); }
+  .rq .ro .rlab{ font-size:12px; font-weight:700; opacity:.75; }
+  .badge{ display:inline-block; font-size:11px; font-weight:800; letter-spacing:.4px; text-transform:uppercase;
+          border-radius:999px; padding:3px 10px; margin-left:8px; vertical-align:middle; }
+  .badge.ok{ background:var(--ok); color:#fff; }
+  .badge.no{ background:var(--bad); color:#fff; }
+  .badge.skip{ background:#8A99A3; color:#fff; }
+
+  /* ---------- Splash (light, logo reveal) ---------- */
+  #splash{
+    position:fixed; inset:0; z-index:100; cursor:pointer;
+    background:var(--bg); color:var(--ink);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:24px;
+    animation:splashOut .5s ease 2.05s forwards;
+  }
+  .sEmblem{ width:124px; height:124px; animation:emblemIn .8s cubic-bezier(.22,1,.36,1) both; }
+  .sEmblem svg{ width:100%; height:100%; display:block; }
+  .sRingO{ fill:none; stroke:var(--teal); stroke-width:3;
+           stroke-dasharray:100; stroke-dashoffset:100; stroke-linecap:round;
+           transform:rotate(-90deg); transform-origin:60px 60px;
+           animation:ringDraw 1s cubic-bezier(.4,0,.2,1) .05s forwards; }
+  .sRingI{ fill:#fff; stroke:#BFDCD2; stroke-width:1.4;
+           stroke-dasharray:100; stroke-dashoffset:100; stroke-linecap:round;
+           transform:rotate(-90deg); transform-origin:60px 60px;
+           animation:ringDraw 1s cubic-bezier(.4,0,.2,1) .18s forwards; }
+  .sOS{ font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+        font-size:31px; font-weight:800; letter-spacing:1px; fill:var(--ink);
+        opacity:0; animation:riseIn .55s ease .45s forwards; }
+  .sSub2{ font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+          font-size:9.5px; font-weight:700; letter-spacing:4.5px; fill:var(--teal);
+          opacity:0; animation:riseIn .55s ease .62s forwards; }
+  #splash .sTitle{
+    font-size:clamp(23px, 6vw, 30px); font-weight:850; letter-spacing:-.3px; line-height:1.3;
+    margin-top:24px; max-width:520px; opacity:0; animation:riseIn .65s ease .95s forwards;
+  }
+  #splash .sSub{ font-size:14.5px; color:var(--muted); margin-top:8px;
+                 opacity:0; animation:riseIn .65s ease 1.15s forwards; }
+  #splash .sCredit{
+    font-size:12px; margin-top:22px; letter-spacing:2.2px; text-transform:uppercase;
+    color:var(--muted); opacity:0; animation:riseIn .65s ease 1.35s forwards;
+  }
+  #splash .sBar{
+    width:150px; height:4px; border-radius:99px; background:var(--mint); margin-top:26px; overflow:hidden;
+    opacity:0; animation:riseIn .5s ease 1.2s forwards;
+  }
+  #splash .sBar i{ display:block; height:100%; width:0%; background:var(--teal); border-radius:99px;
+                   animation:barFill 1.1s ease .55s forwards; }
+  @keyframes emblemIn{ from{ opacity:0; transform:scale(.86) translateY(8px); } to{ opacity:1; transform:scale(1) translateY(0); } }
+  @keyframes ringDraw{ to{ stroke-dashoffset:0; } }
+  @keyframes riseIn{ from{ opacity:0; transform:translateY(13px); } to{ opacity:1; transform:translateY(0); } }
+  @keyframes barFill{ to{ width:100%; } }
+  @keyframes splashOut{ to{ opacity:0; visibility:hidden; } }
+
+  /* ---------- Responsive ---------- */
+  @media (min-width:640px){
+    .secGrid{ grid-template-columns:repeat(2,1fr); }
+    .rangeGrid{ grid-template-columns:1fr 1fr; }
+    .card{ padding:26px 24px; }
+  }
+  @media (min-width:768px){
+    .tOpts{ grid-template-columns:1fr 1fr; }
+  }
+  @media (min-width:1024px){
+    .secGrid{ grid-template-columns:repeat(3,1fr); }
+    .qtext{ font-size:19px; }
+  }
+  @media (max-width:400px){
+    main{ padding:8px 12px 34px; }
+    .card{ padding:19px 15px; }
+    .tile b{ font-size:18px; }
+    .scoreCircle{ width:152px; height:152px; }
+    .scBig{ font-size:29px; }
+    #submitBar .in{ padding:10px 12px; }
+    .submitBtn{ padding:12px 20px; }
+  }
+  @media (hover:hover) and (pointer:fine){
+    .pillBtn:hover{ background:var(--teal-d); }
+    .secCard:hover{ transform:translateY(-2px); border-color:#C9DCD2; }
+    .optCard:hover{ border-color:var(--teal); }
+    .pOpt:hover{ border-color:#A9C6BB; }
+    .tOpt:hover{ border-color:#A9C6BB; }
+    .backBtn:hover{ border-color:var(--teal); color:var(--teal-d); }
+    .openLink:hover{ text-decoration:underline; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{
+      animation-duration:.01ms !important; animation-delay:0s !important;
+      transition-duration:.01ms !important;
+    }
+    #splash{ animation:none; }
+  }
+</style>
+</head>
+<body>
+<div id="splash" title="Tap to skip" role="img" aria-label="Operating Systems — MCQ Self-Test">
+  <div class="sEmblem">
+    <svg viewBox="0 0 120 120" aria-hidden="true">
+      <circle class="sRingI" cx="60" cy="60" r="45" pathLength="100"></circle>
+      <circle class="sRingO" cx="60" cy="60" r="54" pathLength="100"></circle>
+      <text class="sOS" x="61" y="66" text-anchor="middle">OS</text>
+      <text class="sSub2" x="62" y="84" text-anchor="middle">MCQ</text>
+    </svg>
+  </div>
+  <div class="sTitle">Operating Systems — MCQ Self-Test</div>
+  <div class="sSub">224 MCQs · Slides + Handbook · Practice, tests &amp; a mock exam</div>
+  <div class="sBar"><i></i></div>
+  <div class="sCredit">by Muhammad Younas</div>
+</div>
+
+<main>
+  <!-- HOME -->
+  <div id="homeScr">
+    <div class="hero">
+      <h1>Operating Systems MCQ Practice</h1>
+      <p>Chapter-wise MCQs from the class slides and the handbook syllabus — practice, take a scored test, or try a full mock.</p>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>17</b><span>Sections</span></div>
+      <div class="stat"><b>224</b><span>MCQs</span></div>
+      <div class="stat"><b>3</b><span>Modes</span></div>
+    </div>
+
+    <div class="card">
+      <h2>Mock Test</h2>
+      <p class="sub">50 fresh random MCQs drawn from all 224 — slides and handbook mixed, in a new order every time, with the options shuffled too. No feedback while you answer; score, chapter-wise breakdown and a full review at the end.</p>
+      <button type="button" class="pillBtn" id="btnMock">Start Mock Test →</button>
+    </div>
+
+    <div class="card">
+      <h2>Range Test</h2>
+      <p class="sub">Pick any stretch of sections and test them together in one scored test.</p>
+      <div class="rangeGrid">
+        <div>
+          <label class="fldLbl" for="rangeFrom">From section</label>
+          <select id="rangeFrom"></select>
+        </div>
+        <div>
+          <label class="fldLbl" for="rangeTo">To section</label>
+          <select id="rangeTo"></select>
+        </div>
+      </div>
+      <div class="rangeSummary" id="rangeSummary"></div>
+      <button type="button" class="pillBtn" id="btnRange">Start range test →</button>
+    </div>
+
+    <div class="secGrid" id="secGrid"></div>
+    <div class="footCredit">by Muhammad Younas</div>
+  </div>
+
+  <!-- SECTION HUB -->
+  <div id="hubScr" class="hidden">
+    <div class="topbar">
+      <button type="button" class="backBtn" id="hubBack">← Back</button>
+      <div class="topTitle" id="hubTopTitle"></div>
+    </div>
+    <div class="prog"><div class="progFill" id="hubProg"></div></div>
+    <div class="hubHead">
+      <h1 id="hubTitle"></h1>
+      <p class="hubMeta" id="hubMeta"></p>
+    </div>
+    <div class="hubScoreRow"><span class="scorePill" id="hubScore">Score: 0</span></div>
+    <button type="button" class="optCard" id="hubPractice">
+      <span class="optEmoji" aria-hidden="true">✏️</span>
+      <span><span class="ot1">Solve MCQs</span><br><span class="ot2">Practice with instant feedback</span></span>
+      <span class="chev" aria-hidden="true">→</span>
+    </button>
+    <button type="button" class="optCard" id="hubTest">
+      <span class="optEmoji" aria-hidden="true">🎯</span>
+      <span><span class="ot1">Take Test</span><br><span class="ot2" id="hubTestSub"></span></span>
+      <span class="chev" aria-hidden="true">→</span>
+    </button>
+  </div>
+
+  <!-- PRACTICE -->
+  <div id="pracScr" class="hidden">
+    <div class="topbar">
+      <button type="button" class="backBtn" id="pracBack">← Back</button>
+      <div class="topTitle" id="pracTopTitle"></div>
+    </div>
+    <div class="rowBetween">
+      <div class="prog" style="flex:1; margin:2px 0 14px;"><div class="progFill" id="pracProg"></div></div>
+      <span class="scorePill small" id="pracScore" style="margin-bottom:14px;">Score: 0</span>
+    </div>
+    <div class="card">
+      <div class="qCount" id="pCount"></div>
+      <div class="qtext" id="pText"></div>
+      <div id="pOpts"></div>
+      <div class="fb" id="pFb"></div>
+      <div class="centreRow">
+        <button type="button" class="pillBtn hidden" id="btnPNext">Next Question →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRACTICE DONE -->
+  <div id="pracDoneScr" class="hidden">
+    <div class="card doneHead">
+      <h1>🎉 Quiz Completed!</h1>
+      <div class="scoreCircle">
+        <svg viewBox="0 0 120 120" aria-hidden="true">
+          <circle class="scBg" cx="60" cy="60" r="52"></circle>
+          <circle class="scFg" id="pdRing" cx="60" cy="60" r="52"></circle>
+        </svg>
+        <div class="scCentre">
+          <div class="scBig" id="pdScore">0/0</div>
+          <div class="scPct" id="pdPct">0%</div>
+        </div>
+      </div>
+      <p class="sub" id="pdNote" style="color:var(--muted); font-size:14.5px; margin:6px 0 0;"></p>
+      <div class="btnRow">
+        <button type="button" class="pillBtn" id="btnPRetake">Retake Quiz</button>
+        <button type="button" class="ghostBtn" id="btnPHome">← Back to Sections</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCROLLING TEST -->
+  <div id="testScr" class="hidden">
+    <div class="topbar">
+      <button type="button" class="backBtn" id="testBack">← Back</button>
+      <div class="topTitle" id="testTopTitle"></div>
+    </div>
+    <p class="instr">Answer all questions, then click Submit Test at the bottom.</p>
+    <div id="testList"></div>
+  </div>
+  <div id="submitBar" class="hidden">
+    <div class="in">
+      <span id="answeredInfo">Answered: 0 / 0</span>
+      <button type="button" class="submitBtn" id="btnSubmit">Submit Test</button>
+    </div>
+  </div>
+
+  <!-- TEST RESULTS -->
+  <div id="resScr" class="hidden">
+    <div class="card doneHead">
+      <h1>🎉 Test Completed!</h1>
+      <div class="scoreCircle">
+        <svg viewBox="0 0 120 120" aria-hidden="true">
+          <circle class="scBg" cx="60" cy="60" r="52"></circle>
+          <circle class="scFg" id="rRing" cx="60" cy="60" r="52"></circle>
+        </svg>
+        <div class="scCentre">
+          <div class="scBig" id="rScore">0/0</div>
+          <div class="scPct" id="rPct">0%</div>
+        </div>
+      </div>
+      <div class="tileGrid">
+        <div class="tile"><b id="rCorrect">0</b><span>✅ Correct</span></div>
+        <div class="tile"><b id="rWrong">0</b><span>❌ Incorrect</span></div>
+        <div class="tile"><b id="rSkip">0</b><span>⏭️ Not Attempted</span></div>
+      </div>
+      <div class="btnRow">
+        <button type="button" class="pillBtn" id="btnRetake">🔄 Retake Test</button>
+        <button type="button" class="ghostBtn" id="btnHome">← Back to Sections</button>
+      </div>
+    </div>
+    <div class="card hidden" id="rBreakCard">
+      <h2>Chapter-wise breakdown</h2>
+      <p class="sub">How you did in each section covered by this test.</p>
+      <div id="rBreak"></div>
+    </div>
+    <div>
+      <div class="card" style="padding-bottom:8px;">
+        <h2>Review all questions</h2>
+        <p class="sub" style="margin-bottom:2px;">Green = correct answer. Red = your answer, if it was wrong.</p>
+      </div>
+      <div id="rReview"></div>
+      <div class="btnRow" style="margin-bottom:10px;">
+        <button type="button" class="pillBtn" id="btnRetake2">🔄 Retake Test</button>
+        <button type="button" class="ghostBtn" id="btnHome2">← Back to Sections</button>
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+const DATA = {"sections": [{"g": "Slides", "tag": "Slides - Lecture 1: Program vs Process and fork()", "t": "Lecture 1: Program vs Process and fork()", "qs": [{"q": "In Lecture 1 slides, a Program is:", "o": ["A running instance on the CPU", "A file stored on disk", "A process with a PID", "A part of the kernel"], "a": 1}, {"q": "In Lecture 1 slides, a Process is:", "o": ["A file stored on disk", "A running instance of a program", "Only the program code", "A folder"], "a": 1}, {"q": "When a process is created, it gets:", "o": ["PID", "Memory and CPU time", "I/O access", "All of these"], "a": 3}, {"q": "In the Lecture 1 example print(\"hello\"), the correct sequence is:", "o": ["OS creates process -> OS loads interpreter -> terminates", "OS loads interpreter -> OS creates process -> assigns PID -> executes -> terminates", "Assigns PID -> loads disk -> deletes file", "Executes -> creates process -> assigns PID"], "a": 1}, {"q": "fork() in OS creates a new process by:", "o": ["Copying a file", "Duplicating the current process", "Restarting the parent", "Loading a new program from disk"], "a": 1}, {"q": "After fork(), the parent and the child both:", "o": ["Stop execution", "Continue from the same line of code", "Get the same PID", "Share one PID and terminate together"], "a": 1}, {"q": "After fork(), the parent and child processes have:", "o": ["The same PID", "Different PIDs", "No PID", "The PID of the OS"], "a": 1}, {"q": "fork() returns ___ to the child process:", "o": ["The child's PID", "0", "-1", "The parent's PID"], "a": 1}, {"q": "fork() returns ___ to the parent process:", "o": ["0", "The child's PID", "-1 always", "Nothing"], "a": 1}, {"q": "In the Lecture 1 C code, a single fork() is followed by printf(\"Hello from process!\"). The output line is printed:", "o": ["1 time", "2 times", "3 times", "0 times"], "a": 1}, {"q": "If fork() is called twice in a row before a printf, the printf will execute ___ times (one per resulting process):", "o": ["2", "3", "4", "1"], "a": 2}, {"q": "In the Lecture 1 slides, the C header file that provides fork() is:", "o": ["stdio.h only", "unistd.h", "string.h", "stdlib.h only"], "a": 1}, {"q": "Which of these appears in the Lecture 1 list of core OS skills companies need?", "o": ["Process management and scheduling", "Memory and virtual memory", "Concurrency (threads)", "All of these"], "a": 3}, {"q": "Which tool in the Lecture 1 tools list is used to monitor processes / resource usage on Linux?", "o": ["Docker", "htop", "Git", "VS Code"], "a": 1}]}, {"g": "Slides", "tag": "Slides - Lecture 2: Child Processes, Serial vs Parallel", "t": "Lecture 2: Child Processes, Serial vs Parallel", "qs": [{"q": "In the Lecture 2 Python example, a child process is created using the module:", "o": ["os only", "multiprocessing (Process class)", "hashlib", "time only"], "a": 1}, {"q": "In that example, os.getpid() returns:", "o": ["The parent's PID", "The PID of the current process", "The child's name", "The number of processes"], "a": 1}, {"q": "In that example, inside the child, os.getppid() returns:", "o": ["Its own PID", "The PID of its parent process", "0", "The PID of the OS"], "a": 1}, {"q": "The child process is started by calling:", "o": ["child.run()", "child.start()", "child.make()", "child.fork()"], "a": 1}, {"q": "Calling child.join() makes the parent:", "o": ["Terminate the child immediately", "Wait until the child process finishes", "Create another child", "Print the hash of the child"], "a": 1}, {"q": "The Lecture 2 slide describes the child process as running ___ the parent's tasks:", "o": ["Dependent on", "Independently of (modifying the child does not change the parent)", "Inside", "Before compilation of"], "a": 1}, {"q": "In the brute-force example, a Serial / Sequential search looks for the target:", "o": ["From multiple starting points at once", "From start to end, in sequence", "Only in the middle", "In random order"], "a": 1}, {"q": "In the brute-force example, a Parallel search creates:", "o": ["One process only", "Multiple processes that search from multiple starting points in a parallel fashion", "Multiple disks", "A single long process"], "a": 1}, {"q": "The advantage shown by the parallel-process brute-force example is that the target can be:", "o": ["Hidden better", "Searched / found using several processes working at the same time, instead of one sequential pass", "Encrypted automatically", "Deleted safely"], "a": 1}, {"q": "In the parent process, child.pid (after creating the child) gives:", "o": ["The parent's own PID", "The PID of the child created by the parent", "0 always", "The number of child processes"], "a": 1}]}, {"g": "Slides", "tag": "Slides - Lecture 3: Process Life Cycle, Schedulers, Context Switching", "t": "Lecture 3: Process Life Cycle, Schedulers, Context Switching", "qs": [{"q": "In the Lecture 3 slides, a process in the New state is one that:", "o": ["Has finished execution", "Has just been created", "Is waiting for I/O", "Is running on the CPU"], "a": 1}, {"q": "A process in the Ready state is:", "o": ["Running on the CPU", "Waiting to be allocated the CPU", "Waiting for I/O only", "Terminated"], "a": 1}, {"q": "A process in the Running state is:", "o": ["Waiting in the ready queue", "Whose instructions are being executed on the CPU", "Swapped out to disk", "Not yet created"], "a": 1}, {"q": "A process in the Blocked / Waiting state is waiting for:", "o": ["The CPU only", "An I/O operation or an event to complete", "A new PID", "Termination"], "a": 1}, {"q": "A process in the Terminated state has:", "o": ["Just been created", "Finished its execution", "Been admitted to the ready queue", "Requested I/O"], "a": 1}, {"q": "In the slides, Suspend Ready is a state of a process that is:", "o": ["Ready but suspended / swapped out of main memory", "Running on two CPUs", "Terminated twice", "Waiting for compilation"], "a": 0}, {"q": "The transition New -> Ready happens when the OS:", "o": ["Admits the process into the ready queue", "Kills the process", "Completes its I/O", "Runs it on the CPU"], "a": 0}, {"q": "The transition Ready -> Running happens when:", "o": ["The process requests I/O", "The scheduler selects the process and it is given the CPU", "The process terminates", "I/O completes"], "a": 1}, {"q": "The transition Running -> Blocked happens when the running process:", "o": ["Finishes execution", "Requests I/O or waits for an event", "Is preempted by the timer", "Is admitted"], "a": 1}, {"q": "The transition Blocked -> Ready happens when:", "o": ["The awaited I/O / event completes", "The process is created", "The CPU becomes busy", "The process terminates"], "a": 0}, {"q": "The transition Running -> Ready happens when the running process is:", "o": ["Preempted (e.g. interrupt / quantum expiry) before finishing", "Blocked for I/O", "Terminated", "Created"], "a": 0}, {"q": "The transition Running -> Terminated happens when the process:", "o": ["Waits for I/O", "Completes its execution (or is killed)", "Enters the ready queue", "Is suspended"], "a": 1}, {"q": "An I/O-bound process is one that spends more of its time:", "o": ["On the CPU with long bursts", "Doing I/O, with short CPU bursts", "In the ready queue permanently", "Being created"], "a": 1}, {"q": "A CPU-bound process is one that has:", "o": ["Long CPU bursts and relatively little I/O waiting", "Only I/O bursts", "No CPU bursts", "Hundreds of very short bursts only"], "a": 0}, {"q": "The Long-Term Scheduler decides:", "o": ["Which process in the ready queue runs next on the CPU", "Which new processes should enter the ready state", "Swapping of a suspended process", "The value of a PID"], "a": 1}, {"q": "The Long-Term Scheduler controls the:", "o": ["Context switch time", "Degree of multiprogramming", "Size of the time quantum", "Order of I/O devices"], "a": 1}, {"q": "The Short-Term Scheduler selects:", "o": ["A job from the disk to admit", "The next process from the ready queue to run on the CPU", "A process to swap out", "A file to open"], "a": 1}, {"q": "The Short-Term Scheduler works:", "o": ["Once a day", "Very frequently (on almost every scheduling decision)", "Only at shutdown", "Only when a job is submitted"], "a": 1}, {"q": "The Medium-Term Scheduler handles:", "o": ["Admitting new jobs", "Selecting the next process for the CPU every few milliseconds", "Swapping - suspending processes and moving them between main memory and secondary storage", "Printing"], "a": 2}, {"q": "Preemption (as defined in the slides) means a process is:", "o": ["Allowed to run to completion", "Forcefully removed from the CPU", "Created by fork()", "Moved to the disk forever"], "a": 1}, {"q": "In the slides, preemption is also called:", "o": ["Time sharing or multitasking", "Compiling", "Swapping only", "Aging"], "a": 0}, {"q": "In Non-Preemption, once control of the CPU is given to a process:", "o": ["It can be taken back forcibly at any time", "It cannot be taken back forcibly - the process is not removed until it completes execution / releases it itself", "The process is killed after 1 second", "The CPU is shared equally"], "a": 1}, {"q": "The degree of multiprogramming is decided by:", "o": ["The size of the hard disk", "The maximum number of processes that can reside in the ready state", "The number of CPU cores only", "The number of users logged in"], "a": 1}, {"q": "If the degree of multiprogramming is 100, it means:", "o": ["100 CPUs are installed", "At most 100 processes can reside in the ready state", "Each process gets 100 quanta", "100 processes run on one CPU at the same instant"], "a": 1}, {"q": "As per the slides, selecting one process from the Ready Queue and assigning it the CPU - this selection step is called:", "o": ["Context switching", "Scheduling", "Swapping", "Forking"], "a": 1}, {"q": "Context Switching is:", "o": ["Taking the CPU from one process and assigning it to another, while saving the state of the current running process", "Deleting the current process", "Copying a file between folders", "Restarting the computer"], "a": 0}, {"q": "During a context switch, the state of the current running process is saved so that it can:", "o": ["Be deleted safely", "Later resume from where it left off", "Never run again", "Change its PID"], "a": 1}, {"q": "Which of the following is an operation on a process listed in the slides?", "o": ["Creation", "Scheduling and Execution", "Termination and Blocking", "All of these"], "a": 3}, {"q": "IPC stands for:", "o": ["Internal Process Code", "Inter-Process Communication", "Integrated Program Control", "Input Process Channel"], "a": 1}, {"q": "Processes use IPC in order to:", "o": ["Exchange data or coordinate with each other", "Avoid ever running", "Increase their burst time", "Change the CPU"], "a": 0}, {"q": "IPC mechanisms supported by the OS (per the slides) include:", "o": ["Shared memory", "Message passing", "Synchronization tools", "All of these"], "a": 3}, {"q": "As per the slides, a request from a user program to the kernel is called a:", "o": ["Trap", "System Call", "Signal", "Interrupt"], "a": 1}, {"q": "System calls in the slides are grouped into categories including:", "o": ["Process Control and File Management", "Device Management", "Information Maintenance and Communication", "All of these"], "a": 3}, {"q": "Interrupts are signals from:", "o": ["Software errors only", "Hardware, e.g. keyboard or mouse (sometimes software - trap)", "The user typing a command only", "The printer only"], "a": 1}, {"q": "A Trap is:", "o": ["A hardware signal from the keyboard", "An exception / error generated by the software", "A notification to a process", "A type of scheduler"], "a": 1}, {"q": "A Signal is:", "o": ["A notification sent to a process to inform it of an event, such as an error or a user request", "A call to the kernel for file service", "A hardware device", "A ready-queue entry"], "a": 0}, {"q": "Which of the following are entry points to the kernel in the slides?", "o": ["System Call", "Interrupt", "Trap and Signal", "All of these"], "a": 3}, {"q": "In the Lecture 3 class activity, a long-running foreground process blocks the:", "o": [" Hard disk", "Terminal - the process runs in the foreground", "Ready queue forever", "Kernel"], "a": 1}, {"q": "A foreground process running in a terminal is stopped with:", "o": ["kill command only", "Ctrl + C", "chmod 600", "jobs"], "a": 1}, {"q": "To run a process in the background in the terminal, the command is written as:", "o": ["python3 slow.py #", "python3 slow.py &", "python3 slow.py $", "python3 slow.py @"], "a": 1}, {"q": "To check background jobs and running processes in the lab activity, the commands used are:", "o": ["mkdir and nano", "jobs and ps", "grep and chmod", "ls and cd only"], "a": 1}, {"q": "A process is terminated from the terminal by using:", "o": ["kill <PID>", "stop <name>", "end process", "delete <PID>"], "a": 0}]}, {"g": "Slides", "tag": "Slides - Kernel and Its Types", "t": "Kernel and Its Types", "qs": [{"q": "The Kernel is a computer program that is the ___ of an Operating System:", "o": ["Optional add-on", "Heart and core", "User interface theme", "Last part loaded"], "a": 1}, {"q": "When a system starts, the Kernel is the first program loaded:", "o": ["Before the bootloader", "After the bootloader", "Only when a user logs in", "After all applications"], "a": 1}, {"q": "The Kernel remains in memory until:", "o": ["The first process ends", "The Operating System is shut down", "One hour passes", "The user opens a file"], "a": 1}, {"q": "Low-level tasks of the Kernel include:", "o": ["Disk management", "Memory management", "Task management", "All of these"], "a": 3}, {"q": "The Kernel provides an interface between:", "o": ["Two user applications", "The user and the hardware components of the system", "The disk and the printer only", "Two files"], "a": 1}, {"q": "When a process makes a request to the Kernel, it is called a:", "o": ["Trap", "System Call", "Context switch", "Interrupt only"], "a": 1}, {"q": "The protected Kernel Space is a separate area of memory that:", "o": ["Every application can freely modify", "Is not accessible by other application programs", "Stores user documents", "Is slower disk storage"], "a": 1}, {"q": "The memory used by application programs other than the kernel is called:", "o": ["Kernel Space", "User Space", "Swap Space", "Protected Space"], "a": 1}, {"q": "Communication between Kernel Space and User Space is a bit slower because:", "o": ["The CPU is old", "They are two different spaces in memory", "The disk is full", "Applications are large"], "a": 1}, {"q": "A function of the Kernel is Resource Management, which means it:", "o": ["Gives all resources to one process", "Shares resources between various processes so every process gets uniform access", "Locks resources permanently", "Deletes unused resources"], "a": 1}, {"q": "Memory Management by the Kernel means memory must be ___ for the execution of processes:", "o": ["Only allocated", "Allocated and deallocated", "Never touched", "Copied to disk daily"], "a": 1}, {"q": "Device Management by the Kernel means the Kernel manages the ___ of peripheral devices used by processes:", "o": ["Purchase", "Allocation", "Colour", "Speed only"], "a": 1}, {"q": "In Kernel Mode, the CPU executes:", "o": ["Only user applications", "Those instructions that need to be executed by the Kernel only, e.g. memory management", "Games and browsers", "No instructions"], "a": 1}, {"q": "In User Mode, the CPU executes:", "o": ["Kernel instructions", "The processes given by the user, in the User Space", "Only memory management", "Device drivers only"], "a": 1}, {"q": "In a Monolithic Kernel, user services and kernel services are implemented:", "o": ["In different memory spaces", "In the same memory space (no separate user/kernel space)", "Only on disk", "In two computers"], "a": 1}, {"q": "Because there is no separate user and kernel space, execution in a Monolithic Kernel is:", "o": ["Slower", "Faster", "Impossible", "Always blocked"], "a": 1}, {"q": "A disadvantage of a Monolithic Kernel is:", "o": ["It is too small", "If any service fails, it leads to system failure, and adding a new service requires modifying the entire OS", "New services are added too easily", "It uses too little memory"], "a": 1}, {"q": "In a Microkernel, user services and kernel services are implemented:", "o": ["In the same space", "In different spaces - User Space and Kernel Space", "Only in kernel space", "On the disk"], "a": 1}, {"q": "Using separate spaces in a Microkernel ___ the size of the Kernel and the OS:", "o": ["Increases", "Reduces", "Doubles", "Has no effect on"], "a": 1}, {"q": "In a Microkernel, communication between applications and services is done through message passing, which:", "o": ["Increases execution speed", "Reduces the speed of execution", "Deletes messages", "Avoids the kernel"], "a": 1}, {"q": "An advantage of a Microkernel is:", "o": ["The whole OS must be rebuilt for any change", "If new services are to be added, they can be easily added", "It never fails", "It has no kernel space"], "a": 1}, {"q": "A Hybrid Kernel is a combination of:", "o": ["Monolithic Kernel and Microkernel - using the speed of Monolithic and the modularity of Microkernel", "Nanokernel and Exokernel", "User mode and kernel mode only", "Two microkernels"], "a": 0}, {"q": "In a Nanokernel, the distinguishing feature is that:", "o": ["The code of the kernel is very large", "The whole code executing in the privileged mode is very small, and it supports a nanosecond clock resolution", "It has no code", "It runs only user processes"], "a": 1}, {"q": "The Exokernel was developed by:", "o": ["MIT parallel and distributed operating systems group", "Microsoft", "The Linux community only", "IBM in 1967"], "a": 0}, {"q": "In an Exokernel, resource protection is separated from management, and the idea is to:", "o": ["Force all abstractions on applications", "Impose as few abstractions as possible - abstractions are used only when needed, allowing application-specific customization", "Remove the kernel", "Run everything in kernel mode"], "a": 1}]}, {"g": "Slides", "tag": "Slides - SJF / SRTF Worked Example", "t": "SJF / SRTF Worked Example", "qs": [{"q": "In the SJF PDF, preemptive SJF (Shortest Remaining Time First) allocates the CPU to the process with:", "o": ["The longest remaining burst time", "The smallest remaining burst time", "The earliest arrival only", "The largest PID"], "a": 1}, {"q": "In SRTF, if a new process arrives with a shorter remaining burst time than the currently running process:", "o": ["The running process finishes first anyway", "The current process is preempted", "The new process is rejected", "Both processes are terminated"], "a": 1}, {"q": "In the SJF PDF example (P1 AT0 BT7, P2 AT2 BT4, P3 AT4 BT1, P4 AT5 BT4), at time 0.0:", "o": ["All four processes have arrived", "Only P1 has arrived and begins execution", "P2 begins execution", "P3 begins execution"], "a": 1}, {"q": "At time 2.0 in that example, P2 arrives with burst 4 while P1 has ___ remaining, so P1 is preempted:", "o": ["7 units", "5 units", "4 units", "2 units"], "a": 1}, {"q": "At time 4.0 in that example, P3 arrives with burst 1 while P2 has ___ remaining, so P2 is preempted:", "o": ["4 units", "1 unit", "2 units", "5 units"], "a": 2}, {"q": "In that example, P3 finishes execution at time:", "o": ["4.0", "5.0", "7.0", "11.0"], "a": 1}, {"q": "At time 5.0 in that example, P4 arrives, and the remaining times are P2=2, P4=4, P1=5, so the process that resumes is:", "o": ["P1", "P4", "P2", "P3"], "a": 2}, {"q": "In that example, P2 finishes execution at time:", "o": ["5.0", "7.0", "11.0", "16.0"], "a": 1}, {"q": "In that example, after P2 finishes, P4 (remaining 4) runs before P1 (remaining 5), and P4 finishes at time:", "o": ["7.0", "11.0", "16.0", "9.0"], "a": 1}, {"q": "In that example, P1 is the last to finish, at time:", "o": ["11.0", "14.0", "16.0", "12.0"], "a": 2}, {"q": "In that example, the waiting time of P1 is:", "o": ["0.0", "1.0", "9.0", "16.0"], "a": 2}, {"q": "In that example, the turnaround time of P4 (CT 11, AT 5) is:", "o": ["4", "6", "11", "2"], "a": 1}, {"q": "In that example, the average waiting time and average turnaround time are:", "o": ["Avg WT 4.0, Avg TAT 3.0", "Avg WT 3.0, Avg TAT 7.0", "Avg WT 7.0, Avg TAT 3.0", "Avg WT 3.0, Avg TAT 5.0"], "a": 1}]}, {"g": "Handbook", "tag": "Book Pages 1-3: Introduction - What is an Operating System (Lecture 1)", "t": "Pages 1-3: Introduction - What is an Operating System (Lecture 1)", "qs": [{"q": "What are the four major high-level components of a computer system?", "o": ["CPU, memory, I/O devices, and the system bus", "Hardware, operating system, application programs, and users", "Compilers, database systems, video games, and business programs", "Kernel, system programs, users, and files"], "a": 1}, {"q": "In a computer system, the hardware provides:", "o": ["The interface between the user and the applications", "Application programs such as compilers and database systems", "Basic computing resources such as CPU, memory, and I/O devices", "Protection against errors and improper use"], "a": 2}, {"q": "According to the book, the primary purpose of a computer system is to:", "o": ["Store as many files as possible on secondary storage", "Generate executable programs and execute them", "Connect users to other computers on a network", "Protect the files and directories of users"], "a": 1}, {"q": "In the top-down view, an operating system is a program that:", "o": ["Manages all the hardware and software resources of the system", "Controls the execution of user programs to prevent errors", "Allocates CPU time, memory space, and file storage space to programs", "Acts as an intermediary between a user of a computer and the computer hardware"], "a": 3}, {"q": "In the bottom-up view, the operating system is seen as a:", "o": ["Control program", "Resource manager", "User interface", "System call interface"], "a": 1}, {"q": "An operating system is called a control program because it:", "o": ["Manages the execution of user programs to prevent errors and improper use of a computer", "Allocates disk space when files are created", "Schedules disk requests", "Loads programs into main memory for execution"], "a": 0}, {"q": "Acting as a manager of resources, the operating system must allocate resources to programs and users so that the computer system can operate:", "o": ["Quickly, cheaply, and simply", "Interactively, concurrently, and securely", "Efficiently, fairly, and securely", "Automatically, permanently, and transparently"], "a": 2}]}, {"g": "Handbook", "tag": "Book Pages 4-9: Types of Systems, Interrupts, Traps and Hardware Protection (Lecture 2)", "t": "Pages 4-9: Types of Systems, Interrupts, Traps and Hardware Protection (Lecture 2)", "qs": [{"q": "The goals of a single-user system are to maximize:", "o": ["CPU and peripheral device utilization", "User convenience and responsiveness", "Throughput of the system", "Hardware protection"], "a": 1}, {"q": "In a batch system, the job submitted by a user consisted of:", "o": ["The program only", "The program and data only", "The program, data, and control information about the nature of the job in the form of control cards", "The program, its output, and a memory dump"], "a": 2}, {"q": "In batch systems, the output generated by the system consisted of:", "o": ["Only the result of the program", "The result of the program as well as a dump of the final memory and register contents for debugging", "Only a dump of the final memory contents", "The program, data, and control cards"], "a": 1}, {"q": "In batch systems, the CPU is often idle because:", "o": ["There are not enough jobs in the job pool", "The operating system keeps switching between jobs", "Users interact directly with their jobs", "The speeds of mechanical I/O devices are slower than those of electronic devices"], "a": 3}, {"q": "Which operating system is given in the book as an example of a batch operating system?", "o": ["UNIX", "Windows NT Server", "VMS of Digital Equipment Corporation", "MacOS"], "a": 2}, {"q": "Multi-programming increases CPU utilization by:", "o": ["Organizing jobs so that the CPU always has one to execute", "Allowing users to interact with their jobs", "Increasing the speed of I/O devices", "Keeping all jobs of the job pool in memory"], "a": 0}, {"q": "The decision of choosing among several jobs that are ready to be brought into memory, when there is not enough room for all of them, is called:", "o": ["CPU scheduling", "Job scheduling", "Swapping", "Context switching"], "a": 1}, {"q": "In the book's multiprogramming example, processes P1 and P2 finish their execution in 10 time units without multiprogramming. With multiprogramming they finish in:", "o": ["4 time units", "5 time units", "8 time units", "6 time units"], "a": 3}, {"q": "A time-sharing system is a system that is:", "o": ["Multi-user, multi-process, and interactive", "Single-user, multi-process, and interactive", "Multi-user, single-process, and non-interactive", "Multi-user, multi-process, and non-interactive"], "a": 0}, {"q": "In a hard real time system, data is usually stored in:", "o": ["Secondary storage such as a hard disk", "Short-term memory or read only memory, because secondary storage is limited or missing", "The job pool", "Long-term memory"], "a": 1}, {"q": "Which type of system cannot be mixed with the operation of time-sharing systems?", "o": ["Soft real time systems", "Batch systems", "Multi-programmed systems", "Hard real time systems"], "a": 3}, {"q": "An interrupt transfers control to the interrupt service routine generally through the:", "o": ["Dispatch table", "Ready queue", "Interrupt vector table", "Process control block"], "a": 2}, {"q": "A trap (or exception) is a software-generated interrupt caused by:", "o": ["A hardware device such as an I/O device", "An error such as division by zero or invalid memory access, or a user request for an operating system service", "Pressing Ctrl-C at the keyboard", "Completion of an I/O operation"], "a": 1}, {"q": "Pressing Ctrl-C while running a program generates which signal?", "o": ["SIGKILL", "SIGTERM", "SIGINT", "SIGSTOP"], "a": 2}, {"q": "In dual-mode operation, the mode bit value for monitor mode and user mode is:", "o": ["Monitor mode (1), user mode (0)", "Monitor mode (0), user mode (0)", "Monitor mode (1), user mode (1)", "Monitor mode (0), user mode (1)"], "a": 3}, {"q": "For I/O protection, the book defines all I/O instructions to be:", "o": ["Privileged instructions, so users must perform I/O through the operating system", "Non-privileged instructions", "Trap instructions", "System calls"], "a": 0}]}, {"g": "Handbook", "tag": "Book Pages 10, 14-16: Memory Protection, OS Services and System Calls (Lecture 3)", "t": "Pages 10, 14-16: Memory Protection, OS Services and System Calls (Lecture 3)", "qs": [{"q": "The region in memory that a process is allowed to access is known as the:", "o": ["Process control block", "Process address space", "Job pool", "Swap space"], "a": 1}, {"q": "The base register holds:", "o": ["The size of the process", "The address of the next instruction to be executed", "The smallest legal physical memory address for a process", "The largest legal physical memory address for a process"], "a": 2}, {"q": "The limit register contains:", "o": ["The starting address of the process", "The size of the process", "The priority of the process", "The state of the process"], "a": 1}, {"q": "Communication between processes, as an operating system service, may be implemented via:", "o": ["Shared memory or message passing", "Interrupts or traps", "Base and limit registers", "System programs or shells"], "a": 0}, {"q": "The system function of keeping track of which users use how many and which kinds of computer resources is called:", "o": ["Resource allocation", "Protection", "Accounting", "Error detection"], "a": 2}, {"q": "Protection, as a system function, involves ensuring that:", "o": ["All access to system resources is controlled", "Programs can end their execution normally", "Resources are allocated to all users", "Usage statistics are accumulated"], "a": 0}, {"q": "The four events that cause execution of a piece of code in the kernel (entry points into the kernel) are:", "o": ["Fork, exec, wait, and exit", "Program execution, I/O, communication, and error detection", "Interrupt, trap, system call, and signal", "Process control, file management, device management, and communication"], "a": 2}, {"q": "System calls provide:", "o": ["The interface between a process and the operating system", "The interface between two user processes", "Protection between two processes in memory", "The structure of the operating system code"], "a": 0}, {"q": "Which of the following is NOT one of the categories of system calls listed in the book?", "o": ["Process control", "File management", "Device management", "Memory protection"], "a": 3}, {"q": "Which of the following is NOT one of the three general methods used to pass parameters between a running program and the operating system?", "o": ["Passing parameters in registers", "Storing parameters in a table in main memory and passing the table address in a register", "Pushing the parameters onto the stack, to be popped off by the operating system", "Passing parameters through an I/O device"], "a": 3}, {"q": "During system call execution, the operating system determines which system call is to be carried out by examining:", "o": ["The return address", "The call number passed as one of the parameters", "The mode bit", "The interrupt vector table"], "a": 1}, {"q": "The dispatch table in the kernel contains:", "o": ["Addresses of all interrupt service routines", "Pointers to the PCBs in the ready queue", "Pointers to service routines for all system calls", "The base and limit register values of all processes"], "a": 2}, {"q": "DOS and UNIX are given in the book as examples of which operating system structure?", "o": ["Layered structure", "Simple/Monolithic structure", "Microkernel structure", "Modular structure"], "a": 1}]}, {"g": "Handbook", "tag": "Book Page 28: Compiling and Running C Programs with gcc", "t": "Page 28: Compiling and Running C Programs with gcc", "qs": [{"q": "By default, the executable program produced by the gcc command is stored in the file:", "o": ["program.o", "assignment", "a.out", "test.c"], "a": 2}, {"q": "The -o option of the gcc command is used to:", "o": ["Link a library with the object file", "Store the executable program in a specific file", "Remove object files from the directory", "Display the output of the program"], "a": 1}, {"q": "In the command 'gcc program.c -o assignment -lm', the -lm part asks the compiler to:", "o": ["Load the program into main memory", "Store the output in the math library", "Link the math library with the object file", "Run the assignment file"], "a": 2}]}, {"g": "Handbook", "tag": "Book Pages 28-30: Process Concept, Process States and the Process Control Block", "t": "Pages 28-30: Process Concept, Process States and the Process Control Block", "qs": [{"q": "A process can be thought of as:", "o": ["A program stored on disk", "A program in execution", "A passive entity", "The contents of a file"], "a": 1}, {"q": "Which statement correctly distinguishes a program from a process?", "o": ["A program is an active entity, whereas a process is a passive entity", "A program is a passive entity, whereas a process is an active entity with a program counter and associated resources", "A program and a process are exactly the same thing", "A process is stored on disk, whereas a program is loaded in memory"], "a": 1}, {"q": "The program code of a process is sometimes known as the:", "o": ["Data section", "Stack", "Text section", "Process control block"], "a": 2}, {"q": "The data section of a process contains:", "o": ["Temporary data such as method parameters", "Global variables", "The program code", "The value of the program counter"], "a": 1}, {"q": "I/O-bound processes spend more time doing I/O than computations and have:", "o": ["Few very long CPU bursts", "Many short CPU bursts", "No CPU bursts", "One continuous CPU burst"], "a": 1}, {"q": "Word processors and text editors are given in the book as good examples of:", "o": ["CPU-bound processes", "I/O-bound processes", "Cooperating processes", "Batch processes"], "a": 1}, {"q": "A process that is waiting for some event to occur, such as an I/O completion or reception of a signal, is in which state?", "o": ["Ready", "Running", "New", "Waiting"], "a": 3}, {"q": "A process that is waiting to be assigned to a processor is in which state?", "o": ["Waiting", "Ready", "Terminated", "Running"], "a": 1}, {"q": "The process control block (PCB) is also called a:", "o": ["Task control block", "Job control block", "Dispatch table", "Ready queue"], "a": 0}, {"q": "Which of the following is NOT stored in the process control block?", "o": ["Process state", "Program counter", "CPU registers", "The source code of the program"], "a": 3}, {"q": "The CPU-scheduling information stored in the PCB includes:", "o": ["The amount of CPU time used and account numbers", "A process priority, pointers to scheduling queues, and other scheduling parameters", "The list of I/O devices allocated to the process", "The values of the base and limit registers"], "a": 1}]}, {"g": "Handbook", "tag": "Book Pages 31-34: Process Scheduling, Scheduling Queues and Schedulers", "t": "Pages 31-34: Process Scheduling, Scheduling Queues and Schedulers", "qs": [{"q": "The objective of multiprogramming is to:", "o": ["Have some process running all the time so as to maximize CPU utilization", "Switch the CPU among processes so frequently that users can interact with each program", "Keep all processes in the ready queue", "Minimize the number of processes in memory"], "a": 0}, {"q": "Switching the CPU from one process to another, which requires saving the context of the current process and loading the state of the new process, is called:", "o": ["Swapping", "Dispatching", "Context switching", "Job scheduling"], "a": 2}, {"q": "The job queue consists of:", "o": ["All processes residing in main memory", "All processes in the system, as processes enter the system", "All processes waiting for a particular I/O device", "All processes that are ready to execute"], "a": 1}, {"q": "The ready queue is generally stored as:", "o": ["An array", "A binary tree", "A linked list", "A stack"], "a": 2}, {"q": "Each I/O device has its own:", "o": ["Ready queue", "Device queue", "Job queue", "Scheduler"], "a": 1}, {"q": "The long-term scheduler (job scheduler) controls:", "o": ["Which process should be executed next on the CPU", "The degree of multiprogramming, that is, the number of processes in memory", "Which process is swapped out of memory", "The dispatch latency"], "a": 1}, {"q": "The short-term scheduler must select a new process for the CPU frequently; it often executes at least once every:", "o": ["10 milliseconds", "100 milliseconds", "1 second", "100 seconds"], "a": 1}, {"q": "If it takes 10 milliseconds for the short-term scheduler to decide to execute a process for 100 milliseconds, then the percentage of CPU time being used for scheduling only is:", "o": ["1 percent", "10 percent", "9 percent", "90 percent"], "a": 2}, {"q": "If all the processes selected by the long-term scheduler are mostly CPU-bound, then:", "o": ["The ready queue will be mostly empty", "The short-term scheduler will have little work to do", "The I/O devices will go unused and the system will be unbalanced", "The degree of multiprogramming will increase"], "a": 2}, {"q": "The scheme in which the medium-term scheduler removes processes from memory and later reintroduces them is called:", "o": ["Context switching", "Swapping", "Paging", "Spooling"], "a": 1}, {"q": "The area on the disk where swapped out processes are stored is called the:", "o": ["Job pool", "Swap space", "Ready queue", "Device queue"], "a": 1}]}, {"g": "Handbook", "tag": "Book Pages 35-38: Process Creation, Termination and the fork() System Call (Lecture 6)", "t": "Pages 35-38: Process Creation, Termination and the fork() System Call (Lecture 6)", "qs": [{"q": "Restricting a child process to a subset of the resources of the parent process prevents a process from:", "o": ["Communicating with its parent", "Overloading the system by creating too many sub processes", "Terminating before its parent", "Obtaining resources directly from the operating system"], "a": 1}, {"q": "On success, the fork system call returns which value to the child process?", "o": ["The process ID of the child", "-1", "0", "The process ID of the parent"], "a": 2}, {"q": "On success, the fork system call returns which value to the parent process?", "o": ["0", "The process identifier of the child", "-1", "The process identifier of the parent"], "a": 1}, {"q": "If the fork system call fails, it returns -1 in the parent's context and:", "o": ["The child process is still created", "The parent process is terminated", "No child process is created and an error number is set", "The child runs with a partial copy of the parent"], "a": 2}, {"q": "The execlp system call is typically used after a fork to:", "o": ["Wait for the child process to terminate", "Replace the process's memory space with a new program", "Create another child process", "Return data to the parent process"], "a": 1}, {"q": "A process asks the operating system to delete it, after finishing its final statement, by calling the:", "o": ["fork system call", "wait system call", "abort system call", "exit system call"], "a": 3}, {"q": "If the parent process terminates, all its children are assigned as their new parent:", "o": ["The init process", "The oldest child process", "The kernel", "No process at all"], "a": 0}, {"q": "The phenomenon in which, when a process terminates, all its children must also be terminated because the operating system does not allow a child to continue if its parent terminates, is referred to as:", "o": ["Swapping", "Cascading termination", "Context switching", "Starvation"], "a": 1}, {"q": "Which of the following is DIFFERENT in the parent and the child after a successful fork?", "o": ["Environment", "Signal handling settings", "Current working directory", "Process ID (PID)"], "a": 3}, {"q": "Which of the following is a reason the fork system call may fail?", "o": ["The child process has already terminated", "There is not enough swap space", "The parent issued a wait system call", "The child used the execlp system call"], "a": 1}]}, {"g": "Handbook", "tag": "Book Page 39: The wait() System Call and Zombie Processes (Lecture 7)", "t": "Page 39: The wait() System Call and Zombie Processes (Lecture 7)", "qs": [{"q": "The wait system call suspends the calling process until:", "o": ["A signal is received by the kernel", "One of its immediate children terminates, or a traced child stops because it has hit an event of interest", "A new process enters the ready queue", "The CPU becomes idle"], "a": 1}, {"q": "If all child processes have stopped or terminated prior to the call on wait, then:", "o": ["The parent is terminated", "The call blocks indefinitely", "The return from wait is immediate", "A zombie process is created"], "a": 2}, {"q": "If the wait system call is successful, it returns:", "o": ["The exit status of the parent", "The process ID of a child", "Zero in the child process", "-1 to the parent"], "a": 1}, {"q": "A zombie process is a process that:", "o": ["Is running but has no parent", "Has been swapped out to disk", "Has terminated but whose exit status has not yet been received by its parent process or by init", "Is waiting for an I/O device"], "a": 2}]}, {"g": "Handbook", "tag": "Book Pages 41-42: Cooperating Processes and the Producer-Consumer Problem (Lecture 7)", "t": "Pages 41-42: Cooperating Processes and the Producer-Consumer Problem (Lecture 7)", "qs": [{"q": "A process is independent if:", "o": ["It does not share data with other processes and runs on a single CPU", "It cannot affect or be affected by any other process executing in the system", "It never communicates with other processes through the kernel", "It executes system code instead of user code"], "a": 1}, {"q": "Which of the following is NOT listed in the book as an advantage of cooperating processes?", "o": ["Information sharing", "Computation speedup", "Modularity", "Automatic correction of program errors"], "a": 3}, {"q": "Computation speedup by breaking a task into subtasks running in parallel can be obtained only if the computer has:", "o": ["A large main memory", "Multiple processing elements such as CPUs or I/O channels", "A time-sharing operating system", "A bounded buffer"], "a": 1}, {"q": "In the producer-consumer problem, a compiler producing assembly code that is consumed by an assembler is an example of:", "o": ["The compiler as consumer and the assembler as producer", "A producer process (compiler) and a consumer process (assembler)", "Two independent processes", "A bounded buffer"], "a": 1}, {"q": "In the bounded-buffer problem, the consumer must wait if the buffer is empty and the producer must wait if:", "o": ["The buffer is empty", "The buffer is unbounded", "The buffer is full", "The consumer is running"], "a": 2}, {"q": "In the shared-buffer implementation, the buffer is empty when:", "o": ["((in + 1) % BUFFER_SIZE) == out", "in == out", "in points to the first full position", "out points to the next free position"], "a": 1}, {"q": "In the shared-buffer implementation, the 'in' variable points to:", "o": ["The first full position in the buffer", "The last full position in the buffer", "The next free position in the buffer", "The number of items in the buffer"], "a": 2}]}, {"g": "Handbook", "tag": "Book Pages 79-81: CPU Scheduler, Dispatcher, Scheduling Criteria and FCFS (Lecture 14)", "t": "Pages 79-81: CPU Scheduler, Dispatcher, Scheduling Criteria and FCFS (Lecture 14)", "qs": [{"q": "Whenever the CPU becomes idle, the process to be executed next is selected from the ready queue by the:", "o": ["Long-term scheduler", "Dispatcher", "Short-term scheduler (CPU scheduler)", "Medium-term scheduler"], "a": 2}, {"q": "Which of the following is NOT a function of the dispatcher?", "o": ["Selecting the next process from the ready queue", "Switching the context of the current process", "Switching to user mode", "Jumping to the proper location in the user program to restart that program"], "a": 0}, {"q": "The time it takes for the dispatcher to stop one process and start another running is known as the:", "o": ["Turnaround time", "Dispatch latency", "Response time", "Time quantum"], "a": 1}, {"q": "CPU scheduling is non-preemptive when scheduling decisions take place only under the circumstances:", "o": ["Running to ready state, and waiting to ready state", "Running to waiting state, and process termination", "Running to ready state, and process termination", "Waiting to ready state, and process termination"], "a": 1}, {"q": "Under non-preemptive scheduling, once the CPU has been allocated to a process, the process keeps the CPU until it:", "o": ["Is interrupted by a higher priority process", "Uses up one time quantum", "Switches to the waiting state, finishes its CPU burst, or terminates", "Is preempted by the dispatcher"], "a": 2}, {"q": "In a real system, CPU utilization should range from:", "o": ["10 percent (lightly loaded) to 50 percent (heavily used)", "40 percent (lightly loaded) to 90 percent (heavily used)", "50 percent (lightly loaded) to 100 percent (heavily used)", "90 percent (lightly loaded) to 100 percent (heavily used)"], "a": 1}, {"q": "Throughput, as a scheduling criterion, is defined as:", "o": ["The time from submission of a request until the first response is produced", "The interval from the time of submission to the time of completion", "The number of processes completed per unit time", "The time spent waiting in the ready queue"], "a": 2}, {"q": "Turnaround time is the interval from:", "o": ["The time of submission of a request to the first response", "The time a process enters memory to the time it starts execution", "The time of submission to the time of completion of a process", "The time a process spends in the ready queue only"], "a": 2}, {"q": "Response time is defined as the time:", "o": ["From the submission of a request until the first response is produced", "Taken to output the complete response", "From submission to completion of a process", "Spent waiting in the ready queue"], "a": 0}, {"q": "The FCFS scheduling policy is implemented and managed with:", "o": ["A priority queue", "A FIFO queue", "A circular queue", "A linked list of PCBs sorted by burst time"], "a": 1}, {"q": "When a process enters the ready queue under FCFS, its PCB is:", "o": ["Linked onto the head of the queue", "Inserted in the middle of the queue", "Linked onto the tail of the queue", "Placed in a separate device queue"], "a": 2}, {"q": "The FCFS scheduling algorithm is a:", "o": ["Preemptive algorithm", "Non-preemptive algorithm", "Priority-based algorithm", "Multilevel queue algorithm"], "a": 1}, {"q": "For processes P1 (burst 24), P2 (burst 3), and P3 (burst 3) arriving in the order P1, P2, P3 under FCFS, the waiting time of P3 is:", "o": ["24", "3", "27", "17"], "a": 2}, {"q": "For the same processes (P1 = 24, P2 = 3, P3 = 3) served in the order P1, P2, P3 under FCFS, the average waiting time is:", "o": ["3", "17", "27", "9"], "a": 1}, {"q": "If the same three processes arrive in the order P2, P3, P1 under FCFS, the average waiting time becomes:", "o": ["17", "27", "3", "6"], "a": 2}, {"q": "Under FCFS, the convoy effect occurs when:", "o": ["Short processes wait behind a long process to use the CPU, resulting in lower CPU and device utilization", "Many processes enter the ready queue at the same time", "Processes are preempted again and again by the timer", "Low priority processes wait indefinitely for the CPU"], "a": 0}]}, {"g": "Handbook", "tag": "Book Pages 82-84: SJF, SRTF and Priority Scheduling (Lecture 15)", "t": "Pages 82-84: SJF, SRTF and Priority Scheduling (Lecture 15)", "qs": [{"q": "The shortest-job-first (SJF) algorithm assigns the CPU to the process that has:", "o": ["The largest next CPU burst", "The smallest next CPU burst", "The earliest arrival in the system", "The highest priority number"], "a": 1}, {"q": "If two processes have the same length of next CPU burst in SJF scheduling, the tie is broken by using:", "o": ["Priority scheduling", "Round-robin scheduling", "FCFS scheduling", "Random selection"], "a": 2}, {"q": "The real difficulty with the SJF algorithm is:", "o": ["Implementing the ready queue", "Knowing the length of the next CPU request", "Switching the context of processes", "Handling processes with equal burst times"], "a": 1}, {"q": "For long-term scheduling in a batch system, the length used for SJF is:", "o": ["The average of the previous CPU bursts", "The process time limit that a user specifies when he submits the job", "The time limit set by the dispatcher", "The length of the previous I/O burst"], "a": 1}, {"q": "The next CPU burst is predicted as an exponential average using the formula:", "o": ["tau(n+1) = tn + tau(n)", "tau(n+1) = alpha * tn + (1 - alpha) * tau(n), where 0 <= alpha <= 1", "tau(n+1) = (1 - alpha) * tn + alpha * tau(n), where alpha > 1", "tau(n+1) = tn / tau(n)"], "a": 1}, {"q": "Preemptive SJF scheduling is sometimes called:", "o": ["First-come-first-served scheduling", "Shortest-remaining-time-first (SRTF) scheduling", "Round-robin scheduling", "Multilevel queue scheduling"], "a": 1}, {"q": "In the book's SJF example with P1 (arrival 0, burst 7), P2 (arrival 2, burst 4), P3 (arrival 4, burst 1), and P4 (arrival 5, burst 4), the average waiting time under non-preemptive SJF is:", "o": ["3 time units", "7 time units", "4 time units", "16 time units"], "a": 2}, {"q": "For the same set of processes, the average waiting time under SRTF (preemptive SJF) is:", "o": ["3 time units", "4 time units", "12 time units", "7 time units"], "a": 0}, {"q": "SJF is a special case of the general priority-scheduling algorithm, where the priority of a process is:", "o": ["Equal to its next CPU burst", "The inverse of the (predicted) next CPU burst", "Its arrival time in the ready queue", "Fixed at the time of process creation"], "a": 1}, {"q": "In priority scheduling as described in the book, the highest priority corresponds to the:", "o": ["Largest integer", "Priority assigned by the user", "Smallest integer", "Longest waiting process"], "a": 2}, {"q": "A major problem with priority-scheduling algorithms is indefinite blocking, also called:", "o": ["Deadlock", "Convoy effect", "Starvation", "Thrashing"], "a": 2}, {"q": "The solution to the problem of indefinite blockage of low-priority processes is:", "o": ["Swapping", "Aging, gradually increasing the priority of processes that wait in the system for a long time", "Context switching", "Increasing the time quantum"], "a": 1}]}, {"g": "Handbook", "tag": "Book Pages 85-88: Why SJF is Optimal, Round-Robin and Multilevel Queue Scheduling (Lecture 16)", "t": "Pages 85-88: Why SJF is Optimal, Round-Robin and Multilevel Queue Scheduling (Lecture 16)", "qs": [{"q": "SJF is an optimal algorithm because it:", "o": ["Increases the waiting time of short processes more than that of long processes", "Decreases the wait times for short processes much more than it increases the wait times for long processes", "Gives every process an equal share of the CPU", "Minimizes the number of context switches"], "a": 1}, {"q": "In the book's example with next CPU bursts of P1 = 5, P2 = 3, and P3 = 2, the waiting time of P3 under shortest-job-first scheduling is:", "o": ["8 time units", "5 time units", "2 time units", "0 time units"], "a": 3}, {"q": "The round-robin (RR) scheduling algorithm is designed especially for:", "o": ["Batch systems", "Time-sharing systems", "Real time systems", "Single-user systems"], "a": 1}, {"q": "In round-robin scheduling, if the time quantum is very large (infinite), the RR policy becomes the same as:", "o": ["SJF policy", "Priority policy", "FCFS policy", "Multilevel queue policy"], "a": 2}, {"q": "If the time quantum in round-robin scheduling is very small, the approach is called:", "o": ["Processor sharing, in which each of n processes appears to have its own processor running at 1/n the speed of the real processor", "The convoy effect", "Aging", "Swapping"], "a": 0}, {"q": "For good performance of round-robin scheduling, the ratio of the time quantum to context switching should not be less than:", "o": ["1:1", "5:1", "10:1, so context switching overhead is not more than 10 percent", "100:1"], "a": 2}, {"q": "In the book's round-robin example with time quantum 20 (bursts P1 = 53, P2 = 17, P3 = 68, P4 = 24), the average waiting time under RR is 73 time units, as compared with SJF's:", "o": ["38 time units", "73 time units", "17 time units", "97 time units"], "a": 0}, {"q": "Typically, compared with SJF, the round-robin algorithm has:", "o": ["Lower average turnaround time and better response", "Higher average turnaround time, but better response", "Higher average turnaround time and worse response", "Lower average turnaround time and worse response"], "a": 1}, {"q": "In multilevel queue scheduling, processes are permanently assigned to one queue generally based on:", "o": ["Their arrival order in the system", "Some property of the process, such as memory size, process priority, or process type", "The length of their next CPU burst only", "The decision of the dispatcher at run time"], "a": 1}, {"q": "An example of time slicing between queues in multilevel queue scheduling given in the book is:", "o": ["50 percent to foreground and 50 percent to background", "80 percent to foreground in RR and 20 percent to background in FCFS", "20 percent to foreground in RR and 80 percent to background in FCFS", "90 percent to foreground and 10 percent to background"], "a": 1}]}]};
+const SECTIONS = DATA.sections;                 // [{g, tag, t, qs:[{q,o,a}]}] x17
+const LETTERS = ["A", "B", "C", "D"];
+const SCREENS = ["homeScr", "hubScr", "pracScr", "pracDoneScr", "testScr", "resScr"];
+const CIRC = 2 * Math.PI * 52;
+
+function $(id) { return document.getElementById(id); }
+function esc(s) { const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
+function pad2(n) { return String(n).padStart(2, "0"); }
+function go(id) {
+  SCREENS.forEach(function (s) { $(s).classList.toggle("hidden", s !== id); });
+  const inTest = (id === "testScr");
+  $("submitBar").classList.toggle("hidden", !inTest);
+  document.body.classList.toggle("hasBar", inTest);
+  window.scrollTo(0, 0);
+}
+function setRing(el, pct) {
+  el.style.strokeDasharray = CIRC;
+  el.style.strokeDashoffset = CIRC;
+  requestAnimationFrame(function () {
+    requestAnimationFrame(function () { el.style.strokeDashoffset = CIRC * (1 - pct / 100); });
+  });
+}
+
+/* ---------- Home: section grid + range selects ---------- */
+const pracScores = {};                            // section idx -> {c, answered, total}
+function buildHome() {
+  const grid = $("secGrid");
+  grid.innerHTML = "";
+  SECTIONS.forEach(function (s, i) {
+    const card = document.createElement("div");
+    card.className = "secCard";
+    card.innerHTML =
+      '<div class="numBadge">' + pad2(i + 1) + "</div>" +
+      '<div class="st">' + esc(s.t) + "</div>" +
+      '<div class="meta">' + esc(s.g) + " · " + s.qs.length + " MCQs</div>" +
+      '<button type="button" class="openLink">Open section →</button>';
+    const open = function () { openHub(i); };
+    card.querySelector(".openLink").onclick = function (e) { e.stopPropagation(); open(); };
+    card.onclick = open;
+    grid.appendChild(card);
+  });
+  const from = $("rangeFrom"), to = $("rangeTo");
+  from.innerHTML = ""; to.innerHTML = "";
+  SECTIONS.forEach(function (s, i) {
+    const label = pad2(i + 1) + " — " + s.t;
+    from.appendChild(new Option(label, i));
+    to.appendChild(new Option(label, i));
+  });
+  from.value = "0"; to.value = String(SECTIONS.length - 1);
+  from.onchange = updateRangeSummary;
+  to.onchange = updateRangeSummary;
+  updateRangeSummary();
+}
+function rangeIdx() {
+  const a = parseInt($("rangeFrom").value, 10), b = parseInt($("rangeTo").value, 10);
+  return [Math.min(a, b), Math.max(a, b)];
+}
+function updateRangeSummary() {
+  const r = rangeIdx();
+  let n = 0;
+  for (let i = r[0]; i <= r[1]; i++) n += SECTIONS[i].qs.length;
+  $("rangeSummary").textContent = "Section " + (r[0] + 1) + " to Section " + (r[1] + 1) + " = " + n + " questions";
+}
+$("btnRange").onclick = function () {
+  const r = rangeIdx(), idxs = [];
+  for (let i = r[0]; i <= r[1]; i++) idxs.push(i);
+  startTest({
+    title: "Range Test — Sections " + (r[0] + 1) + " to " + (r[1] + 1),
+    kind: "range", range: r, items: itemsFromSections(idxs), back: "home"
+  });
+};
+
+/* ---------- Section hub ---------- */
+let hubIdx = 0;
+function openHub(i) {
+  hubIdx = i;
+  const s = SECTIONS[i], ps = pracScores[i];
+  $("hubTopTitle").textContent = "Section " + (i + 1);
+  $("hubTitle").textContent = s.t;
+  $("hubMeta").textContent = "Section " + (i + 1) + " · " + s.g + " · " + s.qs.length + " MCQs";
+  $("hubScore").textContent = "Score: " + (ps ? ps.c : 0);
+  $("hubProg").style.width = (ps && ps.total ? (ps.answered / ps.total * 100) : 0) + "%";
+  $("hubTestSub").textContent = s.qs.length + " questions · Scored test";
+  go("hubScr");
+}
+$("hubBack").onclick = function () { go("homeScr"); };
+$("hubPractice").onclick = function () { startPractice(hubIdx); };
+$("hubTest").onclick = function () {
+  startTest({ title: SECTIONS[hubIdx].t, kind: "section", idx: hubIdx, items: itemsFromSections([hubIdx]), back: "hub" });
+};
+
+/* ---------- Practice (one question at a time, instant feedback) ---------- */
+let prac = null;
+function startPractice(idx) {
+  const s = SECTIONS[idx];
+  prac = {
+    idx: idx,
+    items: s.qs.map(function (q) { return { sec: s.tag, q: q.q, o: q.o, a: q.a }; }),
+    cur: 0, answers: new Array(s.qs.length).fill(-1), score: 0
+  };
+  pracScores[idx] = { c: 0, answered: 0, total: s.qs.length };
+  renderPrac();
+  go("pracScr");
+}
+function renderPrac() {
+  const it = prac.items[prac.cur], n = prac.items.length, chosen = prac.answers[prac.cur];
+  const answered = prac.answers.filter(function (x) { return x !== -1; }).length;
+  $("pracTopTitle").textContent = "Practice MCQs — " + SECTIONS[prac.idx].t;
+  $("pracProg").style.width = (answered / n * 100) + "%";
+  $("pracScore").textContent = "Score: " + prac.score;
+  $("pCount").textContent = "Question " + (prac.cur + 1) + " of " + n;
+  $("pText").textContent = it.q;
+  const box = $("pOpts");
+  box.innerHTML = "";
+  it.o.forEach(function (opt, i) {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "pOpt";
+    b.innerHTML = '<span class="L">' + LETTERS[i] + '</span><span class="ot">' + esc(opt) + "</span>";
+    if (chosen !== -1) {
+      b.disabled = true;
+      if (i === it.a) b.classList.add("right");
+      else if (i === chosen) b.classList.add("wrong");
+    }
+    b.onclick = function () { pickPrac(i); };
+    box.appendChild(b);
+  });
+  const fb = $("pFb");
+  if (chosen !== -1) {
+    if (chosen === it.a) { fb.className = "fb ok"; fb.textContent = "✅ Correct! Well done."; }
+    else { fb.className = "fb no"; fb.textContent = "❌ Incorrect. The correct answer is: " + it.o[it.a]; }
+  } else { fb.className = "fb"; fb.textContent = ""; }
+  const nb = $("btnPNext");
+  nb.classList.toggle("hidden", chosen === -1);
+  nb.textContent = (prac.cur === n - 1) ? "Finish" : "Next Question →";
+}
+function pickPrac(i) {
+  if (prac.answers[prac.cur] !== -1) return;               // locked after answering
+  prac.answers[prac.cur] = i;
+  if (i === prac.items[prac.cur].a) prac.score++;
+  pracScores[prac.idx] = {
+    c: prac.score,
+    answered: prac.answers.filter(function (x) { return x !== -1; }).length,
+    total: prac.items.length
+  };
+  renderPrac();
+}
+$("btnPNext").onclick = function () {
+  if (prac.cur < prac.items.length - 1) { prac.cur++; renderPrac(); window.scrollTo(0, 0); }
+  else finishPractice();
+};
+$("pracBack").onclick = function () { openHub(prac.idx); };
+function finishPractice() {
+  const n = prac.items.length, pct = Math.round(prac.score / n * 1000) / 10;
+  pracScores[prac.idx] = { c: prac.score, answered: n, total: n };
+  $("pdScore").textContent = prac.score + "/" + n;
+  $("pdPct").textContent = pct + "%";
+  $("pdNote").textContent = SECTIONS[prac.idx].t + " — practice complete.";
+  go("pracDoneScr");
+  setRing($("pdRing"), pct);
+}
+$("btnPRetake").onclick = function () { startPractice(prac.idx); };
+$("btnPHome").onclick = function () { go("homeScr"); };
+
+/* ---------- Tests: scrolling page (section / range / mock) ---------- */
+let test = null;
+function itemsFromSections(idxs) {
+  const items = [];
+  idxs.forEach(function (i) {
+    SECTIONS[i].qs.forEach(function (q) { items.push({ sec: SECTIONS[i].tag, q: q.q, o: q.o, a: q.a }); });
+  });
+  return items;
+}
+function startTest(cfg) {
+  test = { title: cfg.title, kind: cfg.kind, idx: cfg.idx, range: cfg.range, back: cfg.back || "home",
+           items: cfg.items, answers: new Array(cfg.items.length).fill(-1) };
+  renderTestList();
+  go("testScr");
+}
+function renderTestList() {
+  $("testTopTitle").textContent = test.title;
+  const list = $("testList");
+  list.innerHTML = "";
+  test.items.forEach(function (it, qi) {
+    const card = document.createElement("div");
+    card.className = "tq";
+    let html = '<p class="qt"><b>Q' + (qi + 1) + ".</b> " + esc(it.q) + '</p><div class="tOpts">';
+    it.o.forEach(function (opt, oi) {
+      html += '<button type="button" class="tOpt" data-q="' + qi + '" data-o="' + oi + '">' +
+              '<span class="radio"></span><span class="ot">' + esc(opt) + "</span></button>";
+    });
+    html += "</div>";
+    card.innerHTML = html;
+    list.appendChild(card);
+  });
+  list.querySelectorAll(".tOpt").forEach(function (b) {
+    b.onclick = function () {
+      const qi = parseInt(b.getAttribute("data-q"), 10), oi = parseInt(b.getAttribute("data-o"), 10);
+      test.answers[qi] = oi;
+      list.querySelectorAll('.tOpt[data-q="' + qi + '"]').forEach(function (x) { x.classList.remove("sel"); });
+      b.classList.add("sel");
+      updateAnswered();
+    };
+  });
+  updateAnswered();
+}
+function updateAnswered() {
+  const done = test.answers.filter(function (x) { return x !== -1; }).length;
+  $("answeredInfo").textContent = "Answered: " + done + " / " + test.items.length;
+}
+$("testBack").onclick = function () {
+  if (test && test.back === "hub") openHub(test.idx);
+  else go("homeScr");
+};
+$("btnSubmit").onclick = function () {
+  const left = test.answers.filter(function (x) { return x === -1; }).length;
+  if (left > 0 && !confirm(left + " question(s) are still unanswered. Submit the test anyway?")) return;
+  finishTest();
+};
+
+/* ---------- Mock test: fresh random 50 drawn from the full 224 pool ---------- */
+const MOCK_N = 50;
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+function buildPool() {
+  const pool = [];
+  SECTIONS.forEach(function (s) {
+    s.qs.forEach(function (q) { pool.push({ sec: s.tag, q: q.q, o: q.o, a: q.a }); });
+  });
+  return pool;
+}
+function drawMockItems() {
+  // shuffle the whole pool, take the first 50 -> 50 unique questions, fresh order every time;
+  // then shuffle each question's options and remap its correct index to match
+  return shuffle(buildPool()).slice(0, MOCK_N).map(function (it) {
+    const order = shuffle([0, 1, 2, 3]);
+    return { sec: it.sec, q: it.q, o: order.map(function (k) { return it.o[k]; }), a: order.indexOf(it.a) };
+  });
+}
+$("btnMock").onclick = function () {
+  startTest({ title: "Mock Test — 50 Random MCQs", kind: "mock", items: drawMockItems(), back: "home" });
+};
+
+/* ---------- Results ---------- */
+function finishTest() {
+  const n = test.items.length;
+  let correct = 0, wrong = 0;
+  const perSec = {};                                        // tag -> {c, t}
+  test.items.forEach(function (it, i) {
+    if (!perSec[it.sec]) perSec[it.sec] = { c: 0, t: 0 };
+    perSec[it.sec].t++;
+    if (test.answers[i] === it.a) { correct++; perSec[it.sec].c++; }
+    else if (test.answers[i] !== -1) { wrong++; }
+  });
+  const skip = n - correct - wrong;
+  const pct = Math.round(correct / n * 1000) / 10;
+  $("rScore").textContent = correct + "/" + n;
+  $("rPct").textContent = pct + "%";
+  $("rCorrect").textContent = correct;
+  $("rWrong").textContent = wrong;
+  $("rSkip").textContent = skip;
+
+  const tags = Object.keys(perSec);
+  if (tags.length > 1) {
+    $("rBreakCard").classList.remove("hidden");
+    const disp = {};
+    SECTIONS.forEach(function (s) { disp[s.tag] = s.t; });
+    let html = "";
+    tags.forEach(function (tag) {
+      const p = Math.round(perSec[tag].c / perSec[tag].t * 1000) / 10;
+      const cls = p >= 70 ? "strong" : (p < 50 ? "weak" : "");
+      html += '<div class="brkRow ' + cls + '"><div class="brkTop"><span class="bt">' + esc(disp[tag] || tag) +
+              '</span><span class="bn">' + perSec[tag].c + " / " + perSec[tag].t + " · " + p + '%</span></div>' +
+              '<div class="brkBar"><i style="width:' + p + '%"></i></div></div>';
+    });
+    $("rBreak").innerHTML = html;
+  } else {
+    $("rBreakCard").classList.add("hidden");
+    $("rBreak").innerHTML = "";
+  }
+
+  const rv = $("rReview");
+  rv.innerHTML = "";
+  test.items.forEach(function (it, i) {
+    const mine = test.answers[i];
+    const div = document.createElement("div");
+    div.className = "rq";
+    let badge;
+    if (mine === it.a) badge = '<span class="badge ok">Correct</span>';
+    else if (mine === -1) badge = '<span class="badge skip">Not attempted</span>';
+    else badge = '<span class="badge no">Incorrect</span>';
+    let html = '<div class="stag">' + esc(it.sec) + '</div><p class="qt">Q' + (i + 1) + ". " + esc(it.q) + badge + "</p>";
+    it.o.forEach(function (opt, j) {
+      let cls = "ro";
+      if (j === it.a) cls += " right";
+      if (j === mine && mine !== it.a) cls += " mineWrong";
+      let label = "";
+      if (j === it.a) label = ' <span class="rlab">✓ correct answer</span>';
+      if (j === mine && mine !== it.a) label = ' <span class="rlab">— your answer</span>';
+      else if (j === mine) label = ' <span class="rlab">— your answer</span>';
+      html += '<div class="' + cls + '"><b>' + LETTERS[j] + ")</b> " + esc(opt) + label + "</div>";
+    });
+    div.innerHTML = html;
+    rv.appendChild(div);
+  });
+
+  go("resScr");
+  setRing($("rRing"), pct);
+}
+function retakeTest() {
+  if (test.kind === "mock") test.items = drawMockItems();   // a retaken mock draws a NEW random 50
+  else if (test.kind === "section") test.items = itemsFromSections([test.idx]);
+  else if (test.kind === "range") {
+    const idxs = [];
+    for (let i = test.range[0]; i <= test.range[1]; i++) idxs.push(i);
+    test.items = itemsFromSections(idxs);
+  }
+  test.answers = new Array(test.items.length).fill(-1);
+  renderTestList();
+  go("testScr");
+}
+$("btnRetake").onclick = retakeTest;
+$("btnRetake2").onclick = retakeTest;
+$("btnHome").onclick = function () { go("homeScr"); };
+$("btnHome2").onclick = function () { go("homeScr"); };
+
+buildHome();
+
+/* ---------- Splash dismiss (reveal ends ~2.05s, fade to ~2.55s; tap to skip) ---------- */
+(function () {
+  const sp = $("splash");
+  function hide() { if (sp) { sp.style.display = "none"; } }
+  sp.addEventListener("click", hide);
+  const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  setTimeout(hide, reduced ? 350 : 2600);
+})();
+</script>
+</body>
+</html>
